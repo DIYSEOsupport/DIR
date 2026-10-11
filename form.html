@@ -1,3 +1,5 @@
+Step 1: Update form.html on GitHub
+In your DIR repository on GitHub, edit form.html, delete everything inside, and paste this complete, corrected code block:
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -430,7 +432,7 @@
   </footer>
 
   <script>
-    const ENDPOINT = 'https://script.google.com/macros/s/AKfycbwm_a-UvuJJsQFNPBRAHMOpWeAeMaXxu2r3Wch1QqwX68MvULyX9G1uCiTSRJrlNHMc/exec';
+    const ENDPOINT = 'https://script.google.com/macros/s/AKfycbx1yBK8jT6ScjNrRZDpFCls9IwU5_mL9tVIpPLAINH7YFYPi5GYAlvAKatRGoOg5cfC/exec';
 
     let idToken = '';
     let userEmail = '';
@@ -444,18 +446,18 @@
       userEmail = payload.email;
 
       document.getElementById('userInfo').innerText = `Logged in as: ${userEmail}`;
-      fetchMyings();
+      fetchMyListings();
       showStep('stepSelect');
     }
 
-    function fetchMyings() {
+    function fetchMyListings() {
       const payload = JSON.stringify({ idToken: idToken, action: 'mine' });
       
       fetch(ENDPOINT, {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({ payload: payload })
+        body: payload
       }).catch(err => console.log('Mine check sent:', err));
     }
 
@@ -500,10 +502,11 @@
 
     function buildReviewPage() {
       const data = getFormData();
+      const pubContactText = data.pubName ? `${escapeHtml(data.pubName)}${data.pubTitle ? ` (\${escapeHtml(data.pubTitle)})` : ''}` : '';
       let html = `
         <tr><th>Submitter Name</th><td>${escapeHtml(data.name)}</td></tr>
         <tr><th>Business Name</th><td>${escapeHtml(data.businessName)}</td></tr>
-        <tr><th>Public Contact</th><td>${escapeHtml(data.pubName)} ${data.pubTitle ? `(\${escapeHtml(data.pubTitle)})` : ''}</td></tr>
+        <tr><th>Public Contact</th><td>${pubContactText}</td></tr>
         <tr><th>Category</th><td>${escapeHtml(data.category)}</td></tr>
         <tr><th>Slogan</th><td>${escapeHtml(data.slogan)}</td></tr>
         <tr><th>About</th><td>${escapeHtml(data.describe)}</td></tr>
@@ -558,7 +561,7 @@
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({ payload: payload })
+        body: payload
       }).then(() => {
         showStep('stepSuccess');
       }).catch(err => {
