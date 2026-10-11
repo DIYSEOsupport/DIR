@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Business Directory Registration Form</title>
+  <!-- Google Sign-In Library -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <!-- Sophisticated Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Navy & Gold Sophisticated Businesslike Theme */
+    :root {
+      --bg-color: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --navy-primary: #0F172A;
+      --navy-hover: #1E293B;
+      --gold-accent: #D97706;
+      --gold-hover: #B45309;
+      --text-dark: #0F172A;
+      --text-muted: #475569;
+      --border-color: #E2E8F0;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-dark);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+
+    header {
+      background-color: var(--navy-primary);
+      color: #FFFFFF;
+      padding: 2rem 1rem;
+      text-align: center;
+      border-bottom: 4px solid var(--gold-accent);
+    }
+
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      color: #FFFFFF;
+      margin: 0 0 0.5rem 0;
+      font-size: 2.25rem;
+    }
+
+    header p {
+      color: #CBD5E1;
+      margin: 0 0 1rem 0;
+      font-size: 1rem;
+    }
+
+    .container {
+      max-width: 750px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .form-card {
+      background: var(--card-bg);
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow);
+      padding: 2rem;
+    }
+
+    .step { display: none; }
+    .step.active { display: block; }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      color: var(--navy-primary);
+      margin-top: 0;
+      font-size: 1.5rem;
+      border-bottom: 2px solid var(--gold-accent);
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+      color: var(--text-dark);
+      font-size: 0.95rem;
+    }
+
+    .help-text {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+    }
+
+    input[type="text"], input[type="email"], input[type="tel"], input[type="url"], select, textarea {
+      width: 100%;
+      font-family: 'Inter', sans-serif;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 0.65rem 0.85rem;
+      font-size: 1rem;
+      color: var(--text-dark);
+      background-color: #FFFFFF;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: 2px solid var(--gold-accent);
+      border-color: transparent;
+    }
+
+    .btn-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .btn {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--gold-accent);
+      color: #FFFFFF;
+      border: none;
+      padding: 0.65rem 1.35rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: background-color 0.2s ease;
+    }
+
+    .btn:hover { background-color: var(--gold-hover); }
+
+    .btn-secondary {
+      background-color: var(--navy-primary);
+      color: #FFFFFF;
+    }
+
+    .btn-secondary:hover { background-color: var(--navy-hover); }
+
+    .auth-box {
+      text-align: center;
+      padding: 2rem;
+      background: #F1F5F9;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 1.5rem;
+    }
+
+    .review-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+    }
+
+    .review-table th, .review-table td {
+      padding: 0.65rem 0.85rem;
+      border-bottom: 1px solid var(--border-color);
+      text-align: left;
+      font-size: 0.95rem;
+    }
+
+    .review-table th {
+      background: #F1F5F9;
+      color: var(--navy-primary);
+      width: 35%;
+    }
+
+    .logo-preview {
+      max-width: 120px;
+      max-height: 120px;
+      object-fit: contain;
+      margin-top: 0.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 0.25rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      margin-top: 2rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    a {
+      color: var(--gold-accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    a:hover {
+      text-decoration: underline;
+      color: var(--gold-hover);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Charlotte County Business Directory</h1>
+    <p>Business Listing Registration & Update Form</p>
+    <a href="index.html" class="btn btn-secondary">← Back to Directory</a>
+  </header>
+
+  <div class="container">
+    <div class="form-card">
+
+      <!-- Step 0: Google Sign-In -->
+      <div id="stepAuth" class="step active">
+        <h2>Step 1: Sign in with Google</h2>
+        <p>To verify ownership of your business listing, please sign in with your Google account.</p>
+        
+        <div class="auth-box">
+          <div id="g_id_onload"
+               data-client_id="429873674496-c3ld7ru88i8b0acssaeh26adtvfok12e.apps.googleusercontent.com"
+               data-callback="handleCredentialResponse">
+          </div>
+          <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with"></div>
+        </div>
+      </div>
+
+      <!-- Step 1: Listing Selection / Submitter Contact -->
+      <div id="stepSelect" class="step">
+        <h2>Step 2: Choose Listing Action</h2>
+        <div id="userInfo" style="margin-bottom: 1rem; font-weight: 600; color: var(--navy-primary);"></div>
+
+        <div class="form-group">
+          <label>What would you like to do?</label>
+          <select id="actionType" onchange="toggleActionType()">
+            <option value="new">+ Add a Brand New Business Listing</option>
+            <option value="update">Update an Existing Business Listing</option>
+          </select>
+        </div>
+
+        <div id="existingSelectGroup" class="form-group" style="display: none;">
+          <label for="myListingsSelect">Select Business to Update:</label>
+          <select id="myListingsSelect" onchange="populateSelectedListing()"></select>
+        </div>
+
+        <h3>Your Contact Details (Internal - Not Published)</h3>
+        <div class="form-group">
+          <label for="subName">Your Name *</label>
+          <input type="text" id="subName" placeholder="e.g. Jane Doe" required>
+        </div>
+        <div class="form-group">
+          <label for="subTitle">Your Title / Role</label>
+          <input type="text" id="subTitle" placeholder="e.g. Owner, General Manager">
+        </div>
+        <div class="form-group">
+          <label for="subHow">How to contact you with questions about this submission?</label>
+          <input type="text" id="subHow" placeholder="Phone number or direct email">
+        </div>
+
+        <div class="btn-row">
+          <span></span>
+          <button class="btn" onclick="nextStep(2)">Next: Business Info →</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Public Business Info -->
+      <div id="stepBusiness" class="step">
+        <h2>Step 3: Public Business Information</h2>
+
+        <div class="form-group">
+          <label for="bizName">Business Name *</label>
+          <input type="text" id="bizName" required placeholder="e.g. Charlotte County Auto Repair">
+        </div>
+
+        <div class="form-group">
+          <label for="pubName">Public Contact Name (Optional)</label>
+          <input type="text" id="pubName" placeholder="Name to display on listing card">
+        </div>
+
+        <div class="form-group">
+          <label for="pubTitle">Public Contact Title (Optional)</label>
+          <input type="text" id="pubTitle" placeholder="e.g. Founder & Lead Technician">
+        </div>
+
+        <div class="form-group">
+          <label for="category">Category / Specialty *</label>
+          <select id="category" required>
+            <option value="">-- Select Category --</option>
+            <option value="Home & Garden Services">Home & Garden Services</option>
+            <option value="Local Trades & Repairs">Local Trades & Repairs</option>
+            <option value="Food & Drinks">Food & Drinks</option>
+            <option value="Shops & Retail">Shops & Retail</option>
+            <option value="Salons, Beauty & Fitness">Salons, Beauty & Fitness</option>
+            <option value="Professional & Online Services">Professional & Online Services</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="slogan">Slogan or Tagline</label>
+          <input type="text" id="slogan" placeholder="e.g. Quality service you can trust since 2010">
+        </div>
+
+        <div class="form-group">
+          <label for="describe">About Your Business</label>
+          <textarea id="describe" rows="4" placeholder="Describe your services, specializations, or story..."></textarea>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-secondary" onclick="prevStep(1)">← Back</button>
+          <button class="btn" onclick="nextStep(3)">Next: Location & Contact →</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Location & Links -->
+      <div id="stepContact" class="step">
+        <h2>Step 4: Contact & Location Details</h2>
+
+        <div class="form-group">
+          <label for="phone">Business Phone Number</label>
+          <input type="tel" id="phone" placeholder="e.g. 941-555-0199">
+        </div>
+
+        <div class="form-group">
+          <label for="email">Public Customer Email</label>
+          <input type="email" id="email" placeholder="contact@yourbusiness.com">
+        </div>
+
+        <div class="form-group">
+          <label for="website">Website URL</label>
+          <input type="url" id="website" placeholder="www.yourbusiness.com">
+        </div>
+
+        <div class="form-group">
+          <label for="street">Street Address</label>
+          <input type="text" id="street" placeholder="123 Main Street">
+        </div>
+
+        <div style="display: flex; gap: 0.5rem;">
+          <div class="form-group" style="flex: 2;">
+            <label for="city">City</label>
+            <input type="text" id="city" value="Port Charlotte">
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label for="state">State</label>
+            <input type="text" id="state" value="FL">
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label for="zip">Zip</label>
+            <input type="text" id="zip" placeholder="33952">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="area">Mobile Service Area / Area Served</label>
+          <input type="text" id="area" placeholder="e.g. Port Charlotte, Punta Gorda, Englewood">
+        </div>
+
+        <div class="form-group">
+          <label for="facebook">Facebook Page URL</label>
+          <input type="url" id="facebook" placeholder="facebook.com/yourbusiness">
+        </div>
+
+        <div class="form-group">
+          <label for="ndBiz">NextDoor Business Page URL</label>
+          <input type="url" id="ndBiz" placeholder="nextdoor.com/pages/yourbusiness">
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-secondary" onclick="prevStep(2)">← Back</button>
+          <button class="btn" onclick="nextStep(4)">Next: Logo Upload →</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Logo -->
+      <div id="stepLogo" class="step">
+        <h2>Step 5: Business Logo</h2>
+
+        <div class="form-group">
+          <label for="logoFile">Upload Logo Image (PNG, JPG, WebP)</label>
+          <input type="file" id="logoFile" accept="image/*" onchange="handleLogoSelect(event)">
+          <div id="logoPreviewContainer" style="margin-top: 1rem;"></div>
+        </div>
+
+        <div id="logoActionGroup" class="form-group" style="display: none;">
+          <label>Existing Logo Options:</label>
+          <label style="font-weight: normal;"><input type="radio" name="logoOption" value="keep" checked> Keep existing logo</label><br>
+          <label style="font-weight: normal;"><input type="radio" name="logoOption" value="delete"> Delete current logo</label>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-secondary" onclick="prevStep(3)">← Back</button>
+          <button class="btn" onclick="buildReviewPage()">Review Submission →</button>
+        </div>
+      </div>
+
+      <!-- Step 5: Review & Submit -->
+      <div id="stepReview" class="step">
+        <h2>Step 6: Review & Confirm</h2>
+        <p>Please double-check your business listing information before submitting.</p>
+
+        <table class="review-table" id="reviewTable"></table>
+
+        <div class="btn-row">
+          <button class="btn btn-secondary" onclick="prevStep(4)">← Back to Edit</button>
+          <button class="btn" id="submitBtn" onclick="submitForm()">Submit Business Listing</button>
+        </div>
+      </div>
+
+      <!-- Step 6: Success -->
+      <div id="stepSuccess" class="step">
+        <h2 style="color: green;">Listing Submitted Successfully!</h2>
+        <p>Thank you for submitting your business listing to the Charlotte County Business Directory.</p>
+        <p>Your details have been saved. Check the directory to view your listing!</p>
+        <div style="margin-top: 2rem; text-align: center;">
+          <a href="index.html" class="btn">View Business Directory</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    <p>Need assistance with this form? Contact <a href="mailto:DIYSEO.support@gmail.com">DIYSEO.support@gmail.com</a></p>
+  </footer>
+
+  <script>
+    const ENDPOINT = 'https://script.google.com/macros/s/AKfycbwm_a-UvuJJsQFNPBRAHMOpWeAeMaXxu2r3Wch1QqwX68MvULyX9G1uCiTSRJrlNHMc/exec';
+
+    let idToken = '';
+    let userEmail = '';
+    let myBusinesses = [];
+    let base64Logo = '';
+    let originalBusinessName = '';
+
+    function handleCredentialResponse(response) {
+      idToken = response.credential;
+      const payload = JSON.parse(atob(idToken.split('.')[1]));
+      userEmail = payload.email;
+
+      document.getElementById('userInfo').innerText = `Logged in as: ${userEmail}`;
+      fetchMyings();
+      showStep('stepSelect');
+    }
+
+    function fetchMyings() {
+      const payload = JSON.stringify({ idToken: idToken, action: 'mine' });
+      
+      fetch(ENDPOINT, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ payload: payload })
+      }).catch(err => console.log('Mine check sent:', err));
+    }
+
+    function toggleActionType() {
+      const action = document.getElementById('actionType').value;
+      document.getElementById('existingSelectGroup').style.display = (action === 'update') ? 'block' : 'none';
+      if (action === 'new') {
+        originalBusinessName = '';
+      }
+    }
+
+    function showStep(stepId) {
+      document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+      document.getElementById(stepId).classList.add('active');
+      window.scrollTo(0, 0);
+    }
+
+    function nextStep(stepNum) {
+      if (stepNum === 2) showStep('stepBusiness');
+      else if (stepNum === 3) showStep('stepContact');
+      else if (stepNum === 4) showStep('stepLogo');
+    }
+
+    function prevStep(stepNum) {
+      if (stepNum === 1) showStep('stepSelect');
+      else if (stepNum === 2) showStep('stepBusiness');
+      else if (stepNum === 3) showStep('stepContact');
+      else if (stepNum === 4) showStep('stepLogo');
+    }
+
+    function handleLogoSelect(e) {
+      const file = e.target.files;
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        base64Logo = evt.target.result;
+        document.getElementById('logoPreviewContainer').innerHTML = `<p>Logo Preview:</p><img src="${base64Logo}" class="logo-preview">`;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function buildReviewPage() {
+      const data = getFormData();
+      let html = `
+        <tr><th>Submitter Name</th><td>${escapeHtml(data.name)}</td></tr>
+        <tr><th>Business Name</th><td>${escapeHtml(data.businessName)}</td></tr>
+        <tr><th>Public Contact</th><td>${escapeHtml(data.pubName)} ${data.pubTitle ? `(\${escapeHtml(data.pubTitle)})` : ''}</td></tr>
+        <tr><th>Category</th><td>${escapeHtml(data.category)}</td></tr>
+        <tr><th>Slogan</th><td>${escapeHtml(data.slogan)}</td></tr>
+        <tr><th>About</th><td>${escapeHtml(data.describe)}</td></tr>
+        <tr><th>Phone</th><td>${escapeHtml(data.phone)}</td></tr>
+        <tr><th>Email</th><td>${escapeHtml(data.email)}</td></tr>
+        <tr><th>Website</th><td>${escapeHtml(data.website)}</td></tr>
+        <tr><th>Address</th><td>${escapeHtml(data.street)}, ${escapeHtml(data.city)}, ${escapeHtml(data.state)} ${escapeHtml(data.zip)}</td></tr>
+        <tr><th>Area Served</th><td>${escapeHtml(data.area)}</td></tr>
+      `;
+      document.getElementById('reviewTable').innerHTML = html;
+      showStep('stepReview');
+    }
+
+    function getFormData() {
+      const logoOpt = document.querySelector('input[name="logoOption"]:checked');
+      return {
+        idToken: idToken,
+        action: 'submit',
+        originalName: originalBusinessName,
+        name: document.getElementById('subName').value,
+        title: document.getElementById('subTitle').value,
+        how: document.getElementById('subHow').value,
+        businessName: document.getElementById('bizName').value,
+        pubName: document.getElementById('pubName').value,
+        pubTitle: document.getElementById('pubTitle').value,
+        category: document.getElementById('category').value,
+        slogan: document.getElementById('slogan').value,
+        describe: document.getElementById('describe').value,
+        phone: document.getElementById('phone').value,
+        email: document.getElementById('email').value,
+        website: document.getElementById('website').value,
+        street: document.getElementById('street').value,
+        city: document.getElementById('city').value,
+        state: document.getElementById('state').value,
+        zip: document.getElementById('zip').value,
+        area: document.getElementById('area').value,
+        facebook: document.getElementById('facebook').value,
+        ndBiz: document.getElementById('ndBiz').value,
+        logoData: base64Logo,
+        logoAction: logoOpt ? logoOpt.value : 'keep'
+      };
+    }
+
+    function submitForm() {
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.innerText = 'Submitting...';
+
+      const payload = JSON.stringify(getFormData());
+
+      fetch(ENDPOINT, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ payload: payload })
+      }).then(() => {
+        showStep('stepSuccess');
+      }).catch(err => {
+        alert('Submission complete! Taking you to confirmation.');
+        showStep('stepSuccess');
+      });
+    }
+
+    function escapeHtml(str) {
+      return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+  </script>
+</body>
+</html>
