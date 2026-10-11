@@ -335,7 +335,7 @@
   </footer>
 
   <script>
-    const CSV_URL = 'https://script.google.com/macros/s/AKfycbwm_a-UvuJJsQFNPBRAHMOpWeAeMaXxu2r3Wch1QqwX68MvULyX9G1uCiTSRJrlNHMc/exec';
+    const CSV_URL = 'https://script.google.com/macros/s/AKfycbx1yBK8jT6ScjNrRZDpFCls9IwU5_mL9tVIpPLAINH7YFYPi5GYAlvAKatRGoOg5cfC/exec';
     const DIRECTORY_URL = 'https://diyseosupport.github.io/DIR/';
 
     let allBusinesses = [];
@@ -419,42 +419,45 @@
         return;
       }
 
-      container.innerHTML = businesses.map(b => `
-        <div class="card">
-          <div>
-            <div class="card-header">
-              <div>
-                <h3>${escapeHtml(b.name)}</h3>
-                ${b.contactName ? `<div style="font-size:0.9rem; color:var(--text-muted);">\\({escapeHtml(b.contactName)}\\){b.contactTitle ? ` - ${escapeHtml(b.contactTitle)}` : ''}</div>` : ''}
+      container.innerHTML = businesses.map(b => {
+        const contactSub = b.contactName ? ` (${escapeHtml(b.contactName)}${b.contactTitle ? ` - \${escapeHtml(b.contactTitle)}` : ''})` : '';
+        return `
+          <div class="card">
+            <div>
+              <div class="card-header">
+                <div>
+                  <h3>${escapeHtml(b.name)}</h3>
+                  ${contactSub ? `<div style="font-size:0.9rem; color:var(--text-muted);">\${contactSub}</div>` : ''}
+                </div>
+                ${b.logo ? `<img src="\\({escapeHtml(b.logo)}" alt="\\){escapeHtml(b.name)} Logo" class="logo-img">` : ''}
               </div>
-              ${b.logo ? `<img src="\\({escapeHtml(b.logo)}" alt="\\){escapeHtml(b.name)} Logo" class="logo-img">` : ''}
+
+              ${b.category ? `<span class="card-category">\${escapeHtml(b.category)}</span>` : ''}
+              ${b.slogan ? `<div class="slogan">"\${escapeHtml(b.slogan)}"</div>` : ''}
+              ${b.about ? `<div class="card-body">\${escapeHtml(b.about)}</div>` : ''}
+
+              <div class="contact-info">
+                ${b.phone ? `<p>📞 <strong>Phone:</strong> <a href="tel:\\({escapeHtml(b.phone)}">\\){escapeHtml(b.phone)}</a></p>` : ''}
+                ${b.email ? `<p>✉️ <strong>Email:</strong> <a href="mailto:\\({escapeHtml(b.email)}">\\){escapeHtml(b.email)}</a></p>` : ''}
+                ${b.website ? `<p>🌐 <strong>Website:</strong> <a href="\\({formatUrl(b.website)}" target="_blank" rel="noopener">\\){escapeHtml(b.website)}</a></p>` : ''}
+                ${b.facebook ? `<p>📘 <strong>Facebook:</strong> <a href="\${formatUrl(b.facebook)}" target="_blank" rel="noopener">View Page</a></p>` : ''}
+                ${b.ndBiz ? `<p>🏡 <strong>NextDoor:</strong> <a href="\${formatUrl(b.ndBiz)}" target="_blank" rel="noopener">View Page</a></p>` : ''}
+              </div>
+
+              ${(b.address || b.area) ? `
+                <div class="location-info">
+                  \${b.address ? `<p>📍 <strong>Address:</strong> ${escapeHtml(b.address)}</p>` : ''}
+                  \${b.area ? `<p>🚗 <strong>Area Served:</strong> ${escapeHtml(b.area)}</p>` : ''}
+                </div>
+              ` : ''}
             </div>
 
-            ${b.category ? `<span class="card-category">\${escapeHtml(b.category)}</span>` : ''}
-            ${b.slogan ? `<div class="slogan">"\${escapeHtml(b.slogan)}"</div>` : ''}
-            ${b.about ? `<div class="card-body">\${escapeHtml(b.about)}</div>` : ''}
-
-            <div class="contact-info">
-              ${b.phone ? `<p>📞 <strong>Phone:</strong> <a href="tel:\\({escapeHtml(b.phone)}">\\){escapeHtml(b.phone)}</a></p>` : ''}
-              ${b.email ? `<p>✉️ <strong>Email:</strong> <a href="mailto:\\({escapeHtml(b.email)}">\\){escapeHtml(b.email)}</a></p>` : ''}
-              ${b.website ? `<p>🌐 <strong>Website:</strong> <a href="\\({formatUrl(b.website)}" target="_blank" rel="noopener">\\){escapeHtml(b.website)}</a></p>` : ''}
-              ${b.facebook ? `<p>📘 <strong>Facebook:</strong> <a href="\${formatUrl(b.facebook)}" target="_blank" rel="noopener">View Page</a></p>` : ''}
-              ${b.ndBiz ? `<p>🏡 <strong>NextDoor:</strong> <a href="\${formatUrl(b.ndBiz)}" target="_blank" rel="noopener">View Page</a></p>` : ''}
+            <div class="card-footer">
+              <button class="share-btn" onclick="shareBusiness('${escapeJs(b.name)}', '${escapeJs(b.phone)}', '${escapeJs(b.website)}')">Share Listing</button>
             </div>
-
-            ${(b.address || b.area) ? `
-              <div class="location-info">
-                \${b.address ? `<p>📍 <strong>Address:</strong> ${escapeHtml(b.address)}</p>` : ''}
-                \${b.area ? `<p>🚗 <strong>Area Served:</strong> ${escapeHtml(b.area)}</p>` : ''}
-              </div>
-            ` : ''}
           </div>
-
-          <div class="card-footer">
-            <button class="share-btn" onclick="shareBusiness('${escapeJs(b.name)}', '${escapeJs(b.phone)}', '${escapeJs(b.website)}')">Share Listing</button>
-          </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     function filterDirectory() {
